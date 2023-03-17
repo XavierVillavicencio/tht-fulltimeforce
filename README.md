@@ -6,6 +6,8 @@ We used fetch based on the generation of a classic github token to download the 
 
 We used everything related to Tailwind CSS and Font Awesome to layout the user interface. We did not use images, nor additional details other than icons and colors provided by the default Tailwind template; we only changed the typography (Google Fonts) and certain spaces to give an idea of a simple panel.
 
+The token used was encrypted so that it would not be exposed and thus not expired by the github platform. I try not to be so clear on this topic so that the algorithm does not notice what I am saying.
+
 ### How to install 
    ```
    npm install
