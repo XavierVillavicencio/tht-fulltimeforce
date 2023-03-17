@@ -1,0 +1,7 @@
+function Footer() {
+  return (
+    <footer>I'm a footer</footer>
+  );
+}
+
+export default Footer;
