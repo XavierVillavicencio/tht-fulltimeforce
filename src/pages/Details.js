@@ -3,6 +3,9 @@ import dateFormat from "dateformat";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'; // <-- import styles to be used
 import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const empty = require('locutus/php/var/empty');
 
 function Details() {
   const [data, setData] = useState([]);
@@ -21,12 +24,21 @@ function Details() {
     fetch( process.env.REACT_APP_GITHUB_BASE_COMMIT_URL+'/'+id, requestOptions)
       .then(response => response.json())
       .then(result => {
-        setData(result.commit);
-        setFiles(result.files);
-        setLoading(false);
-        return result;
+        if(empty(result)){
+          toast.error('API key error', {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000
+          });
+        }else{
+          setData(result.commit);
+          setFiles(result.files);
+          setLoading(false);
+          return result;
+        }
+        
       })
       .catch(error => console.log('error', error));   
+      return null;
   }
   
   useEffect(() => {
@@ -43,7 +55,7 @@ function Details() {
         <button onClick={(e)=>navigate(`/commits/` ,{replace:true})} type="button" className="bg-slate-500 hover:bg-slate-700 text-white font-bold p-1 rounded">
           <FontAwesomeIcon icon={icon({name: 'left-long', style: 'solid'})} />
         </button> &nbsp;
-        Loading...
+        Loading...  <ToastContainer />
       </div>
     </section>
     :

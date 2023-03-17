@@ -3,14 +3,21 @@ import dateFormat from "dateformat";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'; // <-- import styles to be used
 import { useNavigate } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+
+var empty = require('locutus/php/var/empty');
 
 function Commits() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const getCommits  = async () => {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", process.env.REACT_APP_GITHUB_TOKEN);
+    if(!empty(process.env.REACT_APP_GITHUB_TOKEN)){
+      myHeaders.append("Authorization", process.env.REACT_APP_GITHUB_TOKEN);
+    }
+    
     var requestOptions = {
       method: 'GET',
       redirect: 'follow',
@@ -18,14 +25,27 @@ function Commits() {
     };
     fetch( process.env.REACT_APP_GITHUB_BASE_COMMIT_URL, requestOptions)
       .then(response => response.json())
-      .then(result => setData(result))
+      .then(result => { 
+        if(!empty(result.message)){
+          toast.error('API key error', {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000
+          });
+        }else{
+          setData(result);
+          setLoading(false);
+        }
+        
+      })
       .catch(error => console.log('error', error));
+
+      return null;
   }
 
   useEffect(() => {
     const init = async () => { 
       await getCommits();
-      setLoading(false);
+      
     }
     init();
   }, []);
@@ -34,7 +54,7 @@ function Commits() {
     (loading)?
     <section className="bg-gray-200 p-5">
       <div className='font-serif text-4xl font-bold'>
-        Loading...
+        Loading... <ToastContainer />
       </div>
     </section>
     :
