@@ -15,7 +15,7 @@ function Details() {
   let { id } = useParams();
   const getCommits  = async () => {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", process.env.REACT_APP_GITHUB_TOKEN);
+    myHeaders.append("Authorization", 'Bearer '+atob(process.env.REACT_APP_GITHUB_TOKEN));
     var requestOptions = {
       method: 'GET',
       redirect: 'follow',

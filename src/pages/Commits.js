@@ -15,7 +15,7 @@ function Commits() {
   const getCommits  = async () => {
     var myHeaders = new Headers();
     if(!empty(process.env.REACT_APP_GITHUB_TOKEN)){
-      myHeaders.append("Authorization", process.env.REACT_APP_GITHUB_TOKEN);
+      myHeaders.append("Authorization", 'Bearer '+atob(process.env.REACT_APP_GITHUB_TOKEN));
     }
     
     var requestOptions = {
